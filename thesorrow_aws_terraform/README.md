@@ -1,7 +1,7 @@
 # Overly simple terraform for TheSorrow's IAM user.
 
 
-Configuration in this directory creates IAM user with a random password, a pair of IAM access/secret keys and uploads IAM SSH public key.  User password and secret key is encrypted using TheSorrow's public keybase key.   This setup isn't adhereing to best practices such as assume roles, STS, OIDC, etc.
+Configuration in this directory creates simple IAM user with a random password, a pair of IAM access/secret keys and uploads IAM SSH public key.  User password and secret key is encrypted using TheSorrow's public keybase key.   This setup isn't adhereing to best practices such as assume roles, STS, OIDC, etc.
 
 # Usage
 
