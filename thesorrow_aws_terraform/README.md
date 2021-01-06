@@ -5,7 +5,7 @@ Configuration in this directory creates simple IAM user with a random password, 
 
 # Usage
 
-To run this example you need to execute:
+Toadd this user, you will need to execute:
 
 ```bash
 $ terraform init
@@ -13,7 +13,7 @@ $ terraform plan
 $ terraform apply
 ```
 
-Run `terraform destroy` when you don't need these resources.
+Run `terraform destroy` when you don't need the resources.
 
 ## Requirements
 
