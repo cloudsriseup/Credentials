@@ -1,0 +1,72 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Metadata:
+  License: Apache-2.0
+Description: 'Sample
+  template showing how to add John Menerick to a simple IAM user, group, and policy.  One will create a single
+  user that is a member of a users group and an admin group. The groups each have
+  different IAM policies associated with them. Note: This example also creates an
+  AWSAccessKeyId/AWSSecretKey pair associated with the new user. The example is somewhat
+  contrived since it creates all of the users and groups.  Note that you will need to specify the CAPABILITY_IAM flag
+  when you create the stack to allow this template to execute. You can do this through
+  the AWS management console by clicking on the check box acknowledging that you understand
+  this template creates IAM resources or by specifying the CAPABILITY_IAM flag to
+  the cfn-create-stack command line tool or CreateStack API call.'
+Parameters:
+  Password:
+    NoEcho: 'true'
+    Type: String
+    Description: New account password
+    MinLength: '20'
+    MaxLength: '41'
+    ConstraintDescription: the password must be between 20 and 41 characters
+Resources:
+  TheSorrow:
+    Type: AWS::IAM::User
+    Properties:
+      LoginProfile:
+        Password: !Ref 'Password'
+  TheSorrowGroup:
+    Type: AWS::IAM::Group
+  TheSorrowAdminGroup:
+    Type: AWS::IAM::Group
+  Users:
+    Type: AWS::IAM::UserToGroupAddition
+    Properties:
+      GroupName: !Ref 'TheSorrowGroup'
+      Users: [!Ref 'TheSorrow']
+  Admins:
+    Type: AWS::IAM::UserToGroupAddition
+    Properties:
+      GroupName: !Ref 'TheSorrowAdminGroup'
+      Users: [!Ref 'TheSorrow']
+  TheSorrowUserPolicies:
+    Type: AWS::IAM::Policy
+    Properties:
+      PolicyName: TheSorrow
+      PolicyDocument:
+        Statement:
+        - Effect: Allow
+          Action: ['cloudformation:Describe*', 'cloudformation:List*', 'cloudformation:Get*']
+          Resource: '*'
+      Groups: [!Ref 'TheSorrowGroup']
+  TheSorrowAdminPolicies:
+    Type: AWS::IAM::Policy
+    Properties:
+      PolicyName: TheSorrowAdmins
+      PolicyDocument:
+        Statement:
+        - Effect: Allow
+          Action: cloudformation:*
+          Resource: '*'
+      Groups: [!Ref 'TheSorrowAdminGroup']
+  TheSorrowKeys:
+    Type: AWS::IAM::AccessKey
+    Properties:
+      UserName: !Ref 'TheSorrowUser'
+Outputs:
+  AccessKey:
+    Value: !Ref 'TheSorrowKeys'
+    Description: AWSAccessKeyId of new user
+  SecretKey:
+    Value: !GetAtt [TheSorrowKeys, SecretAccessKey]
+    Description: AWSSecretAccessKey of new user
